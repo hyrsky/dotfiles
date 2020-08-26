@@ -1,0 +1,3 @@
+# Only run local packages.
+# https://github.com/npm/npm/issues/19673
+alias npx="npx --no-install"
