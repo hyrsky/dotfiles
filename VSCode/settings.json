@@ -1,0 +1,9 @@
+{
+  "telemetry.enableTelemetry": false,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
+    }
+  ]
+}
