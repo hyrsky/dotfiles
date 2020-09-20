@@ -5,5 +5,15 @@
       "before": ["j", "j"],
       "after": ["<Esc>"]
     }
-  ]
+  ],
+  // Indentaion
+  "editor.detectIndentation": false,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": false,
+  "editor.renderWhitespace": "boundary",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.eol": "\n",
+  "workbench.editor.limit.value": 8,
+  "workbench.editor.limit.enabled": true
 }
