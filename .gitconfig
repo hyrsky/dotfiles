@@ -1,0 +1,7 @@
+[alias]
+        oneline = log --oneline --pretty=colourful --date=iso
+[pretty]
+        colourful = format:%C(Yellow)%h  %C(reset)%ad (%C(Green)%cr%C(reset))%x09 %C(Cyan)%an: %C(reset)%<(60,trunc)%s
+[user]
+        email = santeri@oikeuttaelaimille.fi
+        name = Santeri Hurnanen
