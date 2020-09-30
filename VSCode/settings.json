@@ -15,5 +15,6 @@
   "files.trimTrailingWhitespace": true,
   "files.eol": "\n",
   "workbench.editor.limit.value": 8,
-  "workbench.editor.limit.enabled": true
+  "workbench.editor.limit.enabled": true,
+  "workbench.tree.indent": 16
 }
