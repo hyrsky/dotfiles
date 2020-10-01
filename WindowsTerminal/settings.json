@@ -2,7 +2,12 @@
 // For documentation on these settings, see: https://aka.ms/terminal-documentation
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
+
+    // When this is set to true, the nextTab and prevTab commands will use the tab switcher UI. Screw that!
+    "useTabSwitcher": false,
+
     "defaultProfile": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+
     "profiles": {
         "defaults": {
             // Put settings here that you want to apply to all profiles
