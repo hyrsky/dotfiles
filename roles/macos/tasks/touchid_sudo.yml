@@ -1,0 +1,23 @@
+---
+# Enable Touch ID for sudo using Apple's drop-in config file
+# /etc/pam.d/sudo_local, which survives macOS updates (unlike editing
+# /etc/pam.d/sudo directly). Available on macOS 14 (Sonoma) and newer.
+
+- name: Ensure /etc/pam.d/sudo_local exists (seed from Apple's template)
+  ansible.builtin.copy:
+    src: /etc/pam.d/sudo_local.template
+    dest: /etc/pam.d/sudo_local
+    remote_src: true
+    force: false
+    owner: root
+    group: wheel
+    mode: "0444"
+  become: true
+
+- name: Enable Touch ID for sudo (pam_tid)
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/sudo_local
+    regexp: '^\s*#?\s*auth\s+sufficient\s+pam_tid\.so'
+    line: "auth       sufficient     pam_tid.so"
+    insertafter: EOF
+  become: true

@@ -1,0 +1,3 @@
+# Python packages installed into the project venv (.venv).
+# Pinned to a major version line; bump deliberately.
+ansible>=10,<12

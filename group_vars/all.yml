@@ -1,0 +1,12 @@
+---
+# Variables shared across all hosts. Override per-OS in the relevant role
+# or here as needed.
+
+# Packages installed on every system, via each OS's native package manager
+# (Homebrew on macOS, dnf on Linux).
+common_packages:
+  - zsh
+
+# --- macOS: Touch ID for sudo ---
+# Enable authenticating `sudo` in the terminal with Touch ID.
+macos_enable_touchid_sudo: true

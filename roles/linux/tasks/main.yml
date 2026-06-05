@@ -1,0 +1,9 @@
+---
+# Linux-specific tasks. Uses the generic package module so the role stays
+# distro-agnostic (resolves to dnf on Fedora via the ansible_pkg_mgr fact).
+
+- name: Install common packages
+  ansible.builtin.package:
+    name: "{{ common_packages }}"
+    state: present
+  become: true

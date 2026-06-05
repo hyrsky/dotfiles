@@ -1,0 +1,7 @@
+---
+# Cross-platform tasks that apply to every machine.
+# (Placeholder for now — e.g. dotfile symlinks, shell config, git settings.)
+
+- name: Common setup placeholder
+  ansible.builtin.debug:
+    msg: "No cross-platform tasks defined yet."

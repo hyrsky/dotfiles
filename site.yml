@@ -1,0 +1,18 @@
+---
+- name: Configure development machine
+  hosts: local
+  gather_facts: true
+
+  pre_tasks:
+    - name: Show detected platform
+      ansible.builtin.debug:
+        msg: "Configuring {{ ansible_distribution }} {{ ansible_distribution_version }} ({{ ansible_os_family }} / {{ ansible_machine }})"
+
+  roles:
+    - role: common
+
+    - role: macos
+      when: ansible_os_family == "Darwin"
+
+    - role: linux
+      when: ansible_system == "Linux"

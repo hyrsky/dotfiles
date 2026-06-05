@@ -1,0 +1,12 @@
+---
+- name: Install Homebrew
+  ansible.builtin.import_tasks: homebrew.yml
+
+- name: Install common packages
+  community.general.homebrew:
+    name: "{{ common_packages }}"
+    state: present
+
+- name: Enable Touch ID for sudo
+  ansible.builtin.import_tasks: touchid_sudo.yml
+  when: macos_enable_touchid_sudo | bool

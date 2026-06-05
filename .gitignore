@@ -1,0 +1,6 @@
+# Python virtualenv used to run Ansible
+.venv/
+
+# Ansible runtime artifacts
+*.retry
+.ansible/

@@ -1,0 +1,19 @@
+---
+- name: Determine Homebrew prefix for this architecture
+  ansible.builtin.set_fact:
+    homebrew_prefix: "{{ '/opt/homebrew' if ansible_machine == 'arm64' else '/usr/local' }}"
+
+- name: Check whether Homebrew is already installed
+  ansible.builtin.stat:
+    path: "{{ homebrew_prefix }}/bin/brew"
+  register: brew_binary
+
+- name: Install Homebrew
+  ansible.builtin.shell:
+    cmd: >-
+      /bin/bash -c
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  environment:
+    NONINTERACTIVE: "1"
+  when: not brew_binary.stat.exists
+  changed_when: true

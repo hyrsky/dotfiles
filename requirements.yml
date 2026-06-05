@@ -1,0 +1,4 @@
+---
+# Ansible Galaxy collections. Installed by `make deps` / bootstrap.sh.
+collections:
+  - name: community.general
