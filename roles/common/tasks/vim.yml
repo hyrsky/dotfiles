@@ -1,15 +1,7 @@
 ---
-# Deploy a modern, plugin-free vim baseline.
-
-- name: Create vim state directories (undo, swap, backup)
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.vim/{{ item }}"
-    state: directory
-    mode: "0700"
-  loop:
-    - undo
-    - swap
-    - backup
+# Deploy a modern, plugin-free vim baseline. The vimrc creates its own state
+# directories on first launch (under $XDG_CACHE_HOME on Linux, ~/.vim
+# elsewhere), so there's nothing to pre-create here.
 
 - name: Install vimrc
   ansible.builtin.copy:

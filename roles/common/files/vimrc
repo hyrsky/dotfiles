@@ -37,7 +37,6 @@ set backspace=indent,eol,start " let backspace delete past anything
 
 " --- UI ---------------------------------------------------------------------
 set number                     " absolute number on the current line...
-set relativenumber             " ...relative numbers elsewhere (hybrid)
 set ruler
 set showcmd                    " show partial commands
 set wildmenu                   " enhanced command-line completion
@@ -67,12 +66,27 @@ endif
 
 " --- Files / persistence ----------------------------------------------------
 " Keep swap, backup, and persistent-undo files out of the working tree.
-" The directories are created by the Ansible vim task. The trailing '//'
-" tells Vim to encode the full path into the file name to avoid collisions.
+" On Linux follow the XDG spec ($XDG_CACHE_HOME, default ~/.cache); elsewhere
+" (e.g. macOS) fall back to ~/.vim.
+if has('unix') && !has('mac') && !has('macunix')
+  let s:vim_cache = (empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME) . '/vim'
+else
+  let s:vim_cache = expand('~/.vim')
+endif
+
+" Create the state directories if they don't exist yet.
+for s:dir in ['undo', 'swap', 'backup']
+  if !isdirectory(s:vim_cache . '/' . s:dir)
+    call mkdir(s:vim_cache . '/' . s:dir, 'p', 0700)
+  endif
+endfor
+
+" The trailing '//' tells Vim to encode the full path into the file name to
+" avoid collisions between same-named files in different directories.
 set undofile
-set undodir=~/.vim/undo//
-set directory=~/.vim/swap//
-set backupdir=~/.vim/backup//
+let &undodir   = s:vim_cache . '/undo//'
+let &directory = s:vim_cache . '/swap//'
+let &backupdir = s:vim_cache . '/backup//'
 
 " --- Mappings ---------------------------------------------------------------
 let mapleader = ' '
