@@ -3,7 +3,6 @@
 # or here as needed.
 
 # Packages installed on every system, via each OS's native package manager
-# (Homebrew on macOS, dnf on Linux).
 common_packages:
   - zsh
   - vim

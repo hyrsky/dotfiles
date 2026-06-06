@@ -59,6 +59,12 @@ if has('termguicolors')
   set termguicolors
 endif
 
+" Colorscheme. unokai is a vivid, Monokai-style theme bundled with Vim 9.1+.
+" `silent!` so an older Vim that lacks it falls back to the default instead
+" of erroring out on startup.
+set background=dark
+silent! colorscheme unokai
+
 " Share the system clipboard when this Vim was built with clipboard support.
 if has('clipboard')
   set clipboard^=unnamed,unnamedplus

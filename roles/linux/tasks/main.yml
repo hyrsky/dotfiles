@@ -1,11 +1,33 @@
 ---
-# Linux-specific tasks. Uses the generic package module so the role stays
-# distro-agnostic (resolves to dnf on Fedora via the ansible_pkg_mgr fact).
+# Linux-specific tasks.
+#
+# Package installation branches on whether the host is an ostree/atomic
+# system (Fedora Silverblue, Kinoite, CoreOS, ...). On those, the generic
+# `package` module mis-detects the package manager as the long-dead
+# community.general.atomic_container, so packages must instead be layered
+# with rpm-ostree. Traditional distros keep the distro-agnostic `package`
+# module (resolves to dnf on regular Fedora via the ansible_pkg_mgr fact).
+
+- name: Detect ostree-based system
+  ansible.builtin.stat:
+    path: /run/ostree-booted
+  register: ostree_booted
+
+- name: Install common packages (rpm-ostree layering)
+  community.general.rpm_ostree_pkg:
+    name: "{{ common_packages }}"
+    state: present
+  become: true
+  when: ostree_booted.stat.exists
+  # Layered packages apply to the running deployment; a reboot may be
+  # needed for some to take effect. Needs root; runs only via `make privileged`.
+  tags: privileged
 
 - name: Install common packages
   ansible.builtin.package:
     name: "{{ common_packages }}"
     state: present
   become: true
+  when: not ostree_booted.stat.exists
   # Needs root; runs only via `make privileged`.
   tags: privileged
