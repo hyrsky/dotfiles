@@ -10,3 +10,6 @@
 - name: Enable Touch ID for sudo
   ansible.builtin.import_tasks: touchid_sudo.yml
   when: macos_enable_touchid_sudo | bool
+  # Needs root; runs only via `make privileged`. The tag propagates to every
+  # task in the imported file.
+  tags: privileged

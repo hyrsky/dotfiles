@@ -7,3 +7,5 @@
     name: "{{ common_packages }}"
     state: present
   become: true
+  # Needs root; runs only via `make privileged`.
+  tags: privileged
