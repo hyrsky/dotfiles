@@ -1,9 +1,16 @@
-# Portable git settings, managed by the Ansible common role and deployed to
-# ~/.config/git/config. Git reads this *before* ~/.gitconfig, so anything
-# machine- or identity-specific — user.name / user.email / user.signingkey,
-# commit signing (gpg.*, commit.gpgsign), safe.directory — intentionally
-# stays in ~/.gitconfig on each machine and takes precedence over this file.
+# Git settings managed by the Ansible common role and deployed to
+# ~/.config/git/config. Git reads this *before* ~/.gitconfig, so any
+# machine-specific overrides in ~/.gitconfig still take precedence.
+#
+# Identity is included here (name/email/signingkey are already public on
+# GitHub). The signing *transport* — gpg.format and gpg.ssh.program (e.g.
+# the 1Password ssh-sign path) — and commit.gpgsign stay machine-local in
+# ~/.gitconfig, since they depend on what's installed on each machine.
 
+[user]
+	name = Santeri Hurnanen
+	email = santeri.hurnanen@fame.fi
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDYD2mV/gdcFJ8t5xUq8KFV2ZpCaGoOFI/EEMorHeyYD
 [column]
 	ui = auto
 [branch]
