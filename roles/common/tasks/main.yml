@@ -1,7 +1,8 @@
 ---
 # Cross-platform tasks that apply to every machine.
-# (Placeholder for now — e.g. dotfile symlinks, shell config, git settings.)
 
-- name: Common setup placeholder
-  ansible.builtin.debug:
-    msg: "No cross-platform tasks defined yet."
+- name: Configure git
+  ansible.builtin.import_tasks: git.yml
+
+- name: Configure zsh
+  ansible.builtin.import_tasks: zsh.yml

@@ -1,0 +1,5 @@
+# Shell aliases sourced from ~/.zshrc (managed by the Ansible common role).
+
+# Only run locally-installed packages; never auto-install on invocation.
+# https://github.com/npm/npm/issues/19673
+alias npx="npx --no-install"

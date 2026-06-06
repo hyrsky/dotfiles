@@ -1,0 +1,16 @@
+---
+# Deploy portable git settings to the XDG config path. Git reads
+# ~/.config/git/config before ~/.gitconfig, so the machine's own identity and
+# commit-signing config (kept in ~/.gitconfig) still take precedence.
+
+- name: Ensure ~/.config/git exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/git"
+    state: directory
+    mode: "0755"
+
+- name: Install git config
+  ansible.builtin.copy:
+    src: gitconfig
+    dest: "{{ ansible_env.HOME }}/.config/git/config"
+    mode: "0644"

@@ -1,0 +1,51 @@
+# Portable git settings, managed by the Ansible common role and deployed to
+# ~/.config/git/config. Git reads this *before* ~/.gitconfig, so anything
+# machine- or identity-specific — user.name / user.email / user.signingkey,
+# commit signing (gpg.*, commit.gpgsign), safe.directory — intentionally
+# stays in ~/.gitconfig on each machine and takes precedence over this file.
+
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[init]
+	defaultBranch = main
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[commit]
+	verbose = true
+[merge]
+	conflictstyle = diff3
+[help]
+	autocorrect = prompt
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+[blame]
+	date = relative
+[core]
+	excludesFile = ~/.gitignore
+[alias]
+	oneline = log --oneline --pretty=colourful --date=iso
+	force-push = push --force-with-lease
+	find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && (git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 -s | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
+	show-merge = "!sh -c 'merge=$(git find-merge $0 $1) && [ -n \"$merge\" ] && git show $merge'"
+[pretty]
+	colourful = format:%C(Yellow)%h  %C(reset)%ad (%C(Green)%cr%C(reset))%x09 %C(Cyan)%an: %C(reset)%<(60,trunc)%s
