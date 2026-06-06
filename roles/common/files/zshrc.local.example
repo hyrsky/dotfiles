@@ -1,0 +1,12 @@
+# ~/.zshrc.local — machine- and work-specific zsh config.
+#
+# Sourced at the end of the managed ~/.zshrc. NOT tracked in the dotfiles repo,
+# so it is the place for anything that should not be shared across machines:
+# secrets, host-specific paths, tool completions, and per-project aliases.
+#
+# The Ansible common role only creates this file if it does not already exist,
+# so your edits here are safe across re-runs.
+
+# Example:
+# export AWS_PROFILE=...
+# alias drush="docker compose exec app drush"

@@ -1,17 +1,61 @@
 ---
-# Deploy shell aliases and make sure the interactive shell picks them up.
+# Bootstrap zsh + Oh My Zsh and deploy the shared base config.
+#
+# Layering mirrors the git role: a portable base (~/.zshrc) is managed here,
+# while machine- and work-specific settings live in ~/.zshrc.local, which the
+# base sources at the end and which this role never overwrites.
 
-- name: Install zsh aliases
+- name: Install Oh My Zsh
+  ansible.builtin.git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh"
+    depth: 1
+    version: master
+    # Clone once; don't pull on every run so local tweaks survive.
+    update: false
+
+- name: Install shared zsh aliases
   ansible.builtin.copy:
     src: zsh_aliases
     dest: "{{ ansible_env.HOME }}/.zsh_aliases"
     mode: "0644"
 
-- name: Source the aliases from .zshrc
-  ansible.builtin.blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    create: true
+- name: Install base .zshrc
+  ansible.builtin.copy:
+    src: zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
     mode: "0644"
-    marker: "# {mark} ANSIBLE MANAGED: zsh aliases"
-    block: |
-      [ -f ~/.zsh_aliases ] && source ~/.zsh_aliases
+
+- name: Seed machine-local .zshrc.local
+  ansible.builtin.copy:
+    src: zshrc.local.example
+    dest: "{{ ansible_env.HOME }}/.zshrc.local"
+    mode: "0644"
+    # Only create it if absent; never clobber machine-local config.
+    force: false
+
+- name: Locate the zsh binary
+  ansible.builtin.command: command -v zsh
+  register: zsh_path
+  changed_when: false
+  # Runs with its privileged consumers below (the default-shell tasks need
+  # zsh_path), so it must carry the same tag or `make privileged` skips it.
+  check_mode: false
+  tags: privileged
+
+- name: Ensure zsh is listed in /etc/shells
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: "{{ zsh_path.stdout }}"
+    state: present
+  become: true
+  # Needs root; runs only via `make privileged`.
+  tags: privileged
+
+- name: Set zsh as the default login shell
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: "{{ zsh_path.stdout }}"
+  become: true
+  # Needs root; runs only via `make privileged`.
+  tags: privileged

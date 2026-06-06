@@ -6,6 +6,7 @@
 common_packages:
   - zsh
   - vim
+  - git  # used to clone Oh My Zsh and manage dotfiles
 
 # --- macOS: Touch ID for sudo ---
 # Enable authenticating `sudo` in the terminal with Touch ID.
