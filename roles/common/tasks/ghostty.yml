@@ -1,0 +1,26 @@
+---
+# Deploy the Ghostty terminal config. The config differs only by destination
+# path and a few OS-specific lines, so a single template holds the shared base
+# and branches on the host's OS facts for the overrides.
+
+- name: Locate the Ghostty config (macOS)
+  ansible.builtin.set_fact:
+    ghostty_config_path: "{{ ansible_env.HOME }}/Library/Application Support/com.mitchellh.ghostty/config"
+  when: ansible_os_family == "Darwin"
+
+- name: Locate the Ghostty config (Linux)
+  ansible.builtin.set_fact:
+    ghostty_config_path: "{{ ansible_env.HOME }}/.config/ghostty/config.ghostty"
+  when: ansible_system == "Linux"
+
+- name: Ensure the Ghostty config directory exists
+  ansible.builtin.file:
+    path: "{{ ghostty_config_path | dirname }}"
+    state: directory
+    mode: "0755"
+
+- name: Install the Ghostty config
+  ansible.builtin.template:
+    src: ghostty.config.j2
+    dest: "{{ ghostty_config_path }}"
+    mode: "0644"

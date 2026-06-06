@@ -40,7 +40,7 @@ group_vars/all.yml    Tunable settings (see below)
 requirements.txt      Python deps for the venv (Ansible)
 requirements.yml      Ansible Galaxy collections
 roles/
-  common/             Cross-platform tasks (git + zsh aliases)
+  common/             Cross-platform tasks
   macos/              macOS-only tasks
   linux/              Linux-only tasks
 ```

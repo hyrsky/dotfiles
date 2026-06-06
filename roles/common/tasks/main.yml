@@ -9,3 +9,6 @@
 
 - name: Configure vim
   ansible.builtin.import_tasks: vim.yml
+
+- name: Configure Ghostty
+  ansible.builtin.import_tasks: ghostty.yml

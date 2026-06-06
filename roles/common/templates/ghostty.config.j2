@@ -1,0 +1,20 @@
+# Ghostty configuration — managed by the Ansible common role.
+# Source: roles/common/templates/ghostty.config.j2
+# Rendered to the platform's config path; local edits are overwritten on the
+# next `make run`.
+#
+# Shared, cross-platform settings live in the base section. OS-specific
+# overrides follow, selected from the host's OS facts.
+
+# --- Base (all platforms) ---------------------------------------------------
+# (no shared settings yet)
+
+{% if ansible_os_family == "Darwin" %}
+# --- macOS ------------------------------------------------------------------
+# Keep the theme chosen in the Ghostty GUI (written to theme.ghostty).
+theme = Adwaita Dark
+{% elif ansible_system == "Linux" %}
+# --- Linux ------------------------------------------------------------------
+theme = Ultra Dark
+window-decoration = false
+{% endif %}
