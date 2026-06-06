@@ -6,6 +6,7 @@
 # (Homebrew on macOS, dnf on Linux).
 common_packages:
   - zsh
+  - vim
 
 # --- macOS: Touch ID for sudo ---
 # Enable authenticating `sudo` in the terminal with Touch ID.

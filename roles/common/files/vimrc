@@ -1,0 +1,90 @@
+" Managed by the Ansible common role; deployed to ~/.vimrc.
+" A small, modern, plugin-free baseline.
+
+" --- Core behaviour ---------------------------------------------------------
+set nocompatible               " use Vim defaults, not vi
+set encoding=utf-8
+scriptencoding utf-8
+filetype plugin indent on      " filetype detection + plugins + indent rules
+syntax enable                  " syntax highlighting
+
+set hidden                     " switch buffers without saving first
+set autoread                   " reload files changed outside Vim
+set confirm                    " prompt instead of failing on unsaved changes
+set history=1000
+set undolevels=1000
+set ttimeout                   " time out on key codes...
+set ttimeoutlen=50             " ...quickly, so <Esc> is responsive
+set lazyredraw                 " don't redraw mid-macro
+set updatetime=300
+
+" --- Search -----------------------------------------------------------------
+set incsearch                  " jump to matches as you type
+set hlsearch                   " highlight all matches
+set ignorecase                 " case-insensitive...
+set smartcase                  " ...unless the pattern has an uppercase char
+
+" --- Indentation ------------------------------------------------------------
+set autoindent
+set smartindent
+set expandtab                  " spaces, not tabs
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set smarttab
+set shiftround                 " round indent to multiples of shiftwidth
+set backspace=indent,eol,start " let backspace delete past anything
+
+" --- UI ---------------------------------------------------------------------
+set number                     " absolute number on the current line...
+set relativenumber             " ...relative numbers elsewhere (hybrid)
+set ruler
+set showcmd                    " show partial commands
+set wildmenu                   " enhanced command-line completion
+set wildmode=longest:full,full
+set laststatus=2               " always show the status line
+set scrolloff=5                " keep context around the cursor
+set sidescrolloff=5
+set display+=lastline
+set wrap
+set linebreak                  " wrap at word boundaries, not mid-word
+set cursorline                 " highlight the current line
+set showmatch                  " briefly jump to the matching bracket
+set splitright                 " new vsplits open to the right
+set splitbelow                 " new splits open below
+set mouse=a                    " mouse support in all modes
+set belloff=all                " no audible/visual bell
+
+" True color, when the terminal supports it.
+if has('termguicolors')
+  set termguicolors
+endif
+
+" Share the system clipboard when this Vim was built with clipboard support.
+if has('clipboard')
+  set clipboard^=unnamed,unnamedplus
+endif
+
+" --- Files / persistence ----------------------------------------------------
+" Keep swap, backup, and persistent-undo files out of the working tree.
+" The directories are created by the Ansible vim task. The trailing '//'
+" tells Vim to encode the full path into the file name to avoid collisions.
+set undofile
+set undodir=~/.vim/undo//
+set directory=~/.vim/swap//
+set backupdir=~/.vim/backup//
+
+" --- Mappings ---------------------------------------------------------------
+let mapleader = ' '
+" Clear search highlighting.
+nnoremap <silent> <leader>n :nohlsearch<CR>
+
+" --- Autocommands -----------------------------------------------------------
+augroup restore_cursor
+  autocmd!
+  " Jump to the last edit position when reopening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &filetype !~# 'commit' |
+    \   execute "normal! g`\"" |
+    \ endif
+augroup END
