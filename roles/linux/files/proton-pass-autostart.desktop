@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Proton Pass
+Comment=Securely store, share, and autofill your credentials.
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=start-proton-pass me.proton.Pass
+Icon=me.proton.Pass
+Terminal=false
+Type=Application
+StartupWMClass=Proton Pass
+X-Flatpak=me.proton.Pass
+X-GNOME-Autostart-enabled=true

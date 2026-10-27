@@ -11,3 +11,8 @@ common_packages:
 # --- macOS: Touch ID for sudo ---
 # Enable authenticating `sudo` in the terminal with Touch ID.
 macos_enable_touchid_sudo: true
+
+# --- Linux: Proton Pass ---
+# Install Proton Pass from Flathub, start it on login, and use its SSH agent
+# for ssh and git commit signing.
+linux_proton_pass: true

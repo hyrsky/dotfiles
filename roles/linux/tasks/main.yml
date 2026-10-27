@@ -31,3 +31,7 @@
   when: not ostree_booted.stat.exists
   # Needs root; runs only via `make privileged`.
   tags: privileged
+
+- name: Configure Proton Pass
+  ansible.builtin.import_tasks: proton_pass.yml
+  when: linux_proton_pass | bool

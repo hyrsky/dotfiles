@@ -3,9 +3,10 @@
 # machine-specific overrides in ~/.gitconfig still take precedence.
 #
 # Identity is included here (name/email/signingkey are already public on
-# GitHub). The signing *transport* — gpg.format and gpg.ssh.program (e.g.
-# the 1Password ssh-sign path) — and commit.gpgsign stay machine-local in
-# ~/.gitconfig, since they depend on what's installed on each machine.
+# GitHub). The signing *transport* — gpg.format and gpg.ssh.program — and
+# commit.gpgsign stay machine-local in ~/.gitconfig, since they depend on
+# what's installed on each machine (on Linux, the linux role sets them up for
+# the Proton Pass SSH agent).
 
 [user]
 	name = Santeri Hurnanen

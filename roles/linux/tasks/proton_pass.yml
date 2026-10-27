@@ -1,0 +1,75 @@
+---
+# Proton Pass (Flathub) as the password manager and SSH agent.
+#
+# The Proton Pass SSH agent listens on ~/.ssh/proton-pass-ssh-agent.sock, a
+# path the app picks itself. The Flatpak sandbox hides ~/.ssh by default, so
+# the app is granted access to it. ssh finds the agent through IdentityAgent in
+# ~/.ssh/config; git commit signing (ssh-keygen) finds it through
+# SSH_AUTH_SOCK, which the base ~/.zshrc exports when the socket exists.
+
+- name: Install Proton Pass from Flathub
+  community.general.flatpak:
+    name: me.proton.Pass
+    remote: flathub
+    method: system
+    state: present
+  become: true
+  # Needs root; runs only via `make privileged`.
+  tags: privileged
+
+- name: Read the Proton Pass Flatpak overrides
+  ansible.builtin.command: flatpak override --user --show me.proton.Pass
+  register: proton_pass_override
+  changed_when: false
+  check_mode: false
+
+- name: Let Proton Pass create its SSH agent socket in ~/.ssh
+  ansible.builtin.command: flatpak override --user --filesystem=~/.ssh:create me.proton.Pass
+  when: "'~/.ssh:create' not in proton_pass_override.stdout"
+  changed_when: true
+
+- name: Ensure ~/.config/autostart exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/autostart"
+    state: directory
+    mode: "0755"
+
+- name: Start Proton Pass on login
+  ansible.builtin.copy:
+    src: proton-pass-autostart.desktop
+    dest: "{{ ansible_env.HOME }}/.config/autostart/me.proton.Pass.desktop"
+    mode: "0644"
+
+- name: Remove the old 1Password autostart entry
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/autostart/com.onepassword.OnePassword.desktop"
+    state: absent
+
+- name: Ensure ~/.ssh exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Use the Proton Pass SSH agent for all hosts
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.ssh/config"
+    # Options before the first Host block apply globally, and ssh uses the
+    # first value it reads, so this wins over any later IdentityAgent.
+    insertbefore: BOF
+    block: |
+      IdentityAgent ~/.ssh/proton-pass-ssh-agent.sock
+    create: true
+    mode: "0600"
+
+- name: Sign commits with ssh-keygen via the agent
+  community.general.git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    scope: global
+  loop:
+    - { name: gpg.format, value: ssh }
+    - { name: gpg.ssh.program, value: ssh-keygen }
+    - { name: commit.gpgsign, value: "true" }
+  loop_control:
+    label: "{{ item.name }}"
