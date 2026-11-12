@@ -8,6 +8,10 @@ common_packages:
   - vim
   - git  # used to clone Oh My Zsh and manage dotfiles
 
+# --- SSH ---
+# The default SSH key is the first key on github.com/<user>.keys.
+ssh_github_user: hyrsky
+
 # --- Ghostty ---
 # Hide the window title bar (window-decoration = false).
 ghostty_hide_titlebar: "{{ ansible_system == 'Linux' }}"

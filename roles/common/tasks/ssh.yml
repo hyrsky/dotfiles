@@ -1,0 +1,30 @@
+---
+# Default SSH settings for every host. The private key is not included:
+# needs ssh agent.
+#
+# The block goes at the end of ~/.ssh/config, so a host that needs another key
+# can get its own block above it.
+- name: Ensure ~/.ssh exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.ssh"
+    state: directory
+    mode: "0700"
+
+# The first key published on GitHub.
+- name: Install the default SSH public key
+  ansible.builtin.copy:
+    content: "{{ lookup('ansible.builtin.url', 'https://github.com/' ~ ssh_github_user ~ '.keys', wantlist=true) | first }}\n"
+    dest: "{{ ansible_env.HOME }}/.ssh/id_ed25519.pub"
+    mode: "0644"
+
+- name: Offer only the default key
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.ssh/config"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: default key"
+    insertafter: EOF
+    block: |
+      Host *
+        IdentityFile ~/.ssh/id_ed25519.pub
+        IdentitiesOnly yes
+    create: true
+    mode: "0600"
