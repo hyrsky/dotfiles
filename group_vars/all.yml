@@ -8,6 +8,10 @@ common_packages:
   - vim
   - git  # used to clone Oh My Zsh and manage dotfiles
 
+# --- Ghostty ---
+# Hide the window title bar (window-decoration = false).
+ghostty_hide_titlebar: "{{ ansible_system == 'Linux' }}"
+
 # --- macOS: Touch ID for sudo ---
 # Enable authenticating `sudo` in the terminal with Touch ID.
 macos_enable_touchid_sudo: true

@@ -9,6 +9,9 @@
 # --- Base (all platforms) ---------------------------------------------------
 # (no shared settings yet)
 keybind = shift+enter=text:\r
+{% if ghostty_hide_titlebar | bool %}
+window-decoration = false
+{% endif %}
 
 {% if ansible_os_family == "Darwin" %}
 # --- macOS ------------------------------------------------------------------
@@ -17,5 +20,5 @@ theme = Adwaita Dark
 {% elif ansible_system == "Linux" %}
 # --- Linux ------------------------------------------------------------------
 theme = Ultra Dark
-window-decoration = false
+window-show-tab-bar = never
 {% endif %}
